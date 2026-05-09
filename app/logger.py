@@ -1,5 +1,6 @@
 import logging
 import json
+import socket
 from datetime import datetime
 
 
@@ -16,14 +17,33 @@ class JsonFormatter(logging.Formatter):
         return json.dumps(log_entry, ensure_ascii=False)
 
 
+class TCPLogstashHandler(logging.Handler):
+    def __init__(self, host: str, port: int):
+        super().__init__()
+        self.host = host
+        self.port = port
+
+    def emit(self, record: logging.LogRecord):
+        try:
+            message = self.format(record) + "\n"
+            with socket.create_connection((self.host, self.port), timeout=2) as sock:
+                sock.sendall(message.encode("utf-8"))
+        except Exception:
+            pass
+
+
 def setup_logger() -> logging.Logger:
     logger = logging.getLogger("todo-service")
     logger.setLevel(logging.INFO)
 
     if not logger.handlers:
-        handler = logging.StreamHandler()
-        handler.setFormatter(JsonFormatter())
-        logger.addHandler(handler)
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(JsonFormatter())
+        logger.addHandler(console_handler)
+
+        logstash_handler = TCPLogstashHandler(host="localhost", port=5044)
+        logstash_handler.setFormatter(JsonFormatter())
+        logger.addHandler(logstash_handler)
 
     return logger
 
