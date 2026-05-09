@@ -12,6 +12,8 @@ class JsonFormatter(logging.Formatter):
             "service": "todo-service",
             "message": record.getMessage(),
         }
+        if hasattr(record, "extra"):
+            log_entry.update(record.extra)
         if record.exc_info:
             log_entry["exception"] = self.formatException(record.exc_info)
         return json.dumps(log_entry, ensure_ascii=False)

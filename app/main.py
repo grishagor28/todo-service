@@ -1,4 +1,4 @@
-import json
+import logging
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -23,16 +23,25 @@ app.add_middleware(
 async def tracking_middleware(request: Request, call_next):
     response = await call_next(request)
     stats.record_request(response.status_code)
-    logger.info(json_log(request, response.status_code))
-    return response
 
-
-def json_log(request: Request, status_code: int) -> str:
-    return json.dumps({
+    extra = {
         "method": request.method,
         "path": request.url.path,
-        "status_code": status_code,
-    }, ensure_ascii=False)
+        "status_code": response.status_code,
+    }
+    record = logging.LogRecord(
+        name=logger.name,
+        level=logging.INFO,
+        pathname="",
+        lineno=0,
+        msg="request",
+        args=(),
+        exc_info=None,
+    )
+    record.extra = extra
+    logger.handle(record)
+
+    return response
 
 
 @app.get("/stats", tags=["service"])
