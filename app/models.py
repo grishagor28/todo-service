@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
@@ -25,6 +25,6 @@ class Task(Base):
     priority: Mapped[str] = mapped_column(String(10), default="medium", nullable=False)
     deadline: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     category_id: Mapped[int] = mapped_column(Integer, ForeignKey("categories.id"), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     category: Mapped["Category"] = relationship("Category", back_populates="tasks")
