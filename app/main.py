@@ -7,7 +7,7 @@ from app.routers import tasks
 from app.stats import stats
 from app.logger import logger
 
-Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine, checkfirst=True)
 
 app = FastAPI(title="Todo Service", version="1.0.0")
 
