@@ -1,3 +1,4 @@
+import os
 import logging
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -47,6 +48,14 @@ async def tracking_middleware(request: Request, call_next):
 @app.get("/stats", tags=["service"])
 def get_stats():
     return JSONResponse(content=stats.get_stats())
+
+
+@app.get("/instance", tags=["service"])
+def get_instance():
+    return JSONResponse(content={
+        "instance": os.environ.get("INSTANCE_NAME", "todo-service"),
+        "service": "todo-service",
+    })
 
 
 app.include_router(tasks.router)
