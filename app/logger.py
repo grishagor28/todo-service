@@ -3,7 +3,6 @@ import json
 import socket
 from datetime import datetime
 
-
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         log_entry = {
@@ -17,7 +16,6 @@ class JsonFormatter(logging.Formatter):
         if record.exc_info:
             log_entry["exception"] = self.formatException(record.exc_info)
         return json.dumps(log_entry, ensure_ascii=False)
-
 
 class TCPLogstashHandler(logging.Handler):
     def __init__(self, host: str, port: int):
@@ -33,7 +31,6 @@ class TCPLogstashHandler(logging.Handler):
         except Exception:
             pass
 
-
 def setup_logger() -> logging.Logger:
     logger = logging.getLogger("todo-service")
     logger.setLevel(logging.INFO)
@@ -48,6 +45,5 @@ def setup_logger() -> logging.Logger:
         logger.addHandler(logstash_handler)
 
     return logger
-
 
 logger = setup_logger()

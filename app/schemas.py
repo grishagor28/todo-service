@@ -2,9 +2,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, field_validator
 
-
 VALID_PRIORITIES = {"low", "medium", "high"}
-
 
 class CategoryCreate(BaseModel):
     name: str
@@ -16,13 +14,11 @@ class CategoryCreate(BaseModel):
             raise ValueError("Название категории не может быть пустым")
         return value.strip()
 
-
 class CategoryResponse(BaseModel):
     id: int
     name: str
 
     model_config = {"from_attributes": True}
-
 
 class TaskCreate(BaseModel):
     title: str
@@ -44,7 +40,6 @@ class TaskCreate(BaseModel):
         if value not in VALID_PRIORITIES:
             raise ValueError("Приоритет должен быть: low, medium или high")
         return value
-
 
 class TaskUpdate(BaseModel):
     title: Optional[str] = None
@@ -69,7 +64,6 @@ class TaskUpdate(BaseModel):
         if value is not None and value not in VALID_PRIORITIES:
             raise ValueError("Приоритет должен быть: low, medium или high")
         return value
-
 
 class TaskResponse(BaseModel):
     id: int

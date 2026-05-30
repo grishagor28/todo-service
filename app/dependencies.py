@@ -8,7 +8,6 @@ ALGORITHM = "HS256"
 
 bearer_scheme = HTTPBearer()
 
-
 def get_current_user_id(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
 ) -> int:

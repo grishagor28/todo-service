@@ -1,7 +1,6 @@
 from datetime import datetime
 from collections import defaultdict
 
-
 class ServiceStats:
     def __init__(self):
         self.version = "1.0.0"
@@ -25,6 +24,5 @@ class ServiceStats:
                 "by_status": dict(self.request_counts),
             },
         }
-
 
 stats = ServiceStats()

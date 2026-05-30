@@ -19,7 +19,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.middleware("http")
 async def tracking_middleware(request: Request, call_next):
     response = await call_next(request)
@@ -44,11 +43,9 @@ async def tracking_middleware(request: Request, call_next):
 
     return response
 
-
 @app.get("/stats", tags=["service"])
 def get_stats():
     return JSONResponse(content=stats.get_stats())
-
 
 @app.get("/instance", tags=["service"])
 def get_instance():
@@ -56,6 +53,5 @@ def get_instance():
         "instance": os.environ.get("INSTANCE_NAME", "todo-service"),
         "service": "todo-service",
     })
-
 
 app.include_router(tasks.router)

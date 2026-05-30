@@ -3,7 +3,6 @@ from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
-
 class Category(Base):
     __tablename__ = "categories"
 
@@ -12,7 +11,6 @@ class Category(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
 
     tasks: Mapped[list["Task"]] = relationship("Task", back_populates="category")
-
 
 class Task(Base):
     __tablename__ = "tasks"
